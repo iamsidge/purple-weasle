@@ -40,7 +40,7 @@ const MAP := [
 ]
 
 const CreatureScene := preload("res://scenes/creature.tscn")
-const PlayerScene   := preload("res://scenes/fps_player.tscn")
+const PlayerScene   := preload("res://scenes/player_3d.tscn")
 const ExitScene     := preload("res://scenes/exit_zone_3d.tscn")
 
 # ─── Materials (created once, reused) ────────────────────────────────────────
