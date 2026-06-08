@@ -15,9 +15,9 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Purple Weasle"
-config/description="A top-down stealth puzzle game. You are the Purple Weasle — sneak, crouch and outwit guards to reach the exit undetected."
+config/description="A first-person horror game. You are the Purple Weasle — navigate a corrupted woodland maze and survive its twisted inhabitants."
 config/version="0.1.0"
-run/main_scene="res://scenes/main_menu.tscn"
+run/main_scene="res://scenes/level_01_3d.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 
 [autoload]
@@ -71,4 +71,4 @@ interact={
 
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="forward_plus"

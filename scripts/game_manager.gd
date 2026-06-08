@@ -14,9 +14,9 @@ var alerts_triggered : int = 0
 const SCENE_MENU     := "res://scenes/main_menu.tscn"
 const SCENE_GAMEOVER := "res://scenes/game_over.tscn"
 const LEVEL_SCENES   := [
-	"res://scenes/level_01.tscn",
-	"res://scenes/level_02.tscn",
-	"res://scenes/level_03.tscn",
+	"res://scenes/level_01_3d.tscn",
+	"res://scenes/level_02_3d.tscn",
+	"res://scenes/level_03_3d.tscn",
 ]
 
 func _ready() -> void:
