@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://main_menu"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1"]
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.0, 0.1, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -100.0
+offset_right = 120.0
+offset_bottom = 100.0
+alignment = 1
+
+[node name="Title" type="Label" parent="VBox"]
+text = "PURPLE WEASLE"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="VBox"]
+text = "A Stealth Puzzle Game"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="VBox"]
+custom_minimum_size = Vector2(0, 30)
+
+[node name="PlayButton" type="Button" parent="VBox"]
+text = "Play"
+
+[node name="QuitButton" type="Button" parent="VBox"]
+text = "Quit"
