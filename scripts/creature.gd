@@ -230,7 +230,7 @@ func _update_visuals() -> void:
 			State.CHASE:
 				sprite.modulate = Color(1.6, 0.35, 0.2, 1.0)  # angry red
 			State.ATTACK:
-				var pulse := abs(sin(Time.get_ticks_msec() * 0.01))
+				var pulse := absf(sin(Time.get_ticks_msec() * 0.01))
 				sprite.modulate = Color(1.5 + pulse * 0.5, 0.2, 0.2, 1.0)
 			_:
 				sprite.modulate = Color.WHITE
