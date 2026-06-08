@@ -11,11 +11,6 @@ height = 8.0
 [sub_resource type="RectangleShape2D" id="player_crouch"]
 size = Vector2(14.0, 10.0)
 
-; ─── Level 01 — The Museum Lobby ─────────────────────────────────────────────
-; Walls, guard and shadow zones are spawned at runtime by level_01.gd.
-; Only the Player, Camera and HUD live here in the scene file.
-; ──────────────────────────────────────────────────────────────────────────────
-
 [node name="Level01" type="Node2D"]
 script = ExtResource("1")
 
@@ -52,4 +47,4 @@ text = "Level 1 — The Museum Lobby"
 offset_left = 10.0
 offset_top = 30.0
 text = "WASD: move   Shift: crouch   Ctrl: dash   Reach the EXIT"
-add_theme_font_size_override("font_size") = 11
+theme_override_font_sizes/font_size = 11

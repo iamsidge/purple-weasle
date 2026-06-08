@@ -39,7 +39,6 @@ script = ExtResource("1")
 position = Vector3(0, 0.8, 0)
 shape = SubResource("col_shape")
 
-; ── Visible character mesh ───────────────────────────────────────────────────
 [node name="CharacterMesh" type="Node3D" parent="."]
 
 [node name="Body" type="MeshInstance3D" parent="CharacterMesh"]
@@ -54,19 +53,16 @@ mesh = SubResource("head_mesh")
 surface_material_override/0 = SubResource("head_mat")
 cast_shadow = 1
 
-; Snout nub — points forward so you can see which way the weasle faces
 [node name="Snout" type="MeshInstance3D" parent="CharacterMesh"]
 position = Vector3(0, 1.42, -0.28)
 scale = Vector3(0.3, 0.2, 0.4)
 mesh = SubResource("head_mesh")
 surface_material_override/0 = SubResource("head_mat")
 
-; ── Camera rig ───────────────────────────────────────────────────────────────
 [node name="CameraPivot" type="Node3D" parent="."]
 position = Vector3(0, 1.1, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
-; Pulls camera in if a wall is in the way
 collision_mask = 1
 spring_length = 4.5
 rotation = Vector3(-0.25, 0, 0)
