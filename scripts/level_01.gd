@@ -110,7 +110,8 @@ func _place_guard(pos: Vector2, row: int) -> void:
 
 	var guard : CharacterBody2D = GuardScene.instantiate()
 	guard.position      = pos
-	guard.patrol_points = [get_path_to(pa), get_path_to(pb)]
+	var points : Array[NodePath] = [get_path_to(pa), get_path_to(pb)]
+	guard.patrol_points = points
 	guard.collision_layer = 4
 	guard.collision_mask  = 1
 	add_child(guard)
