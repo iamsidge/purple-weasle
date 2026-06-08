@@ -50,7 +50,7 @@ func _physics_process(delta: float) -> void:
 
 # ─── Suspicion logic ─────────────────────────────────────────────────────────
 func _update_suspicion(delta: float) -> void:
-	var can_see := detection.can_see_player() if detection else false
+	var can_see : bool = detection.can_see_player() if detection else false
 
 	if can_see:
 		suspicion = minf(suspicion + SUSPICION_RATE * _visibility_mult() * delta, SUSPICION_MAX)
