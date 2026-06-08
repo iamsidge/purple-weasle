@@ -78,13 +78,13 @@ func _create_materials() -> void:
 
 	mat_wall                = StandardMaterial3D.new()
 	mat_wall.albedo_texture  = wall_tex
-	mat_wall.albedo_color    = Color(0.55, 0.45, 0.38)
-	mat_wall.roughness       = 0.92
+	mat_wall.albedo_color    = Color(0.95, 0.82, 0.7)
+	mat_wall.roughness       = 0.9
 
 	mat_floor               = StandardMaterial3D.new()
 	mat_floor.albedo_texture = floor_tex
-	mat_floor.albedo_color   = Color(0.30, 0.38, 0.22)
-	mat_floor.roughness      = 0.98
+	mat_floor.albedo_color   = Color(0.55, 0.62, 0.4)
+	mat_floor.roughness      = 0.97
 	mat_floor.uv1_scale      = Vector3(2.0, 2.0, 2.0)
 
 	mat_ceil               = StandardMaterial3D.new()
@@ -98,9 +98,9 @@ func _build_level() -> void:
 	var relic_total := 0
 
 	_make_slab(Vector3(cols * CELL * 0.5, 0.0,    rows * CELL * 0.5),
-	           Vector3(cols * CELL, 0.02, rows * CELL), mat_floor)
+			   Vector3(cols * CELL, 0.02, rows * CELL), mat_floor)
 	_make_slab(Vector3(cols * CELL * 0.5, WALL_H, rows * CELL * 0.5),
-	           Vector3(cols * CELL, 0.02, rows * CELL), mat_ceil)
+			   Vector3(cols * CELL, 0.02, rows * CELL), mat_ceil)
 
 	for row in rows:
 		for col in MAP[row].length():

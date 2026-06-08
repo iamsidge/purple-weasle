@@ -60,11 +60,11 @@ mesh = SubResource("head_mesh")
 surface_material_override/0 = SubResource("head_mat")
 
 [node name="Lantern" type="OmniLight3D" parent="."]
-position = Vector3(0, 1.5, 0)
-light_color = Color(1.0, 0.82, 0.55, 1)
-light_energy = 3.2
-omni_range = 12.0
-shadow_enabled = true
+position = Vector3(0, 2.0, 0)
+light_color = Color(1.0, 0.84, 0.58, 1)
+light_energy = 4.5
+omni_range = 16.0
+shadow_enabled = false
 
 [node name="CameraPivot" type="Node3D" parent="."]
 position = Vector3(0, 1.1, 0)
