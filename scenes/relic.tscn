@@ -11,7 +11,7 @@ size = Vector3(0.4, 0.6, 0.4)
 [sub_resource type="StandardMaterial3D" id="relic_mat"]
 albedo_color = Color(0.7, 0.3, 1.0, 1.0)
 emission_enabled = true
-emission = Color(0.6, 0.2, 1.0)
+emission = Color(0.6, 0.2, 1.0, 1)
 emission_energy_multiplier = 4.0
 roughness = 0.2
 metallic = 0.4
@@ -32,6 +32,6 @@ surface_material_override/0 = SubResource("relic_mat")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 position = Vector3(0, 1.0, 0)
-light_color = Color(0.7, 0.35, 1.0)
+light_color = Color(0.7, 0.35, 1.0, 1)
 light_energy = 1.6
 omni_range = 6.0

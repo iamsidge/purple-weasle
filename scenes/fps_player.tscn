@@ -22,7 +22,7 @@ fov = 85.0
 
 [node name="Flashlight" type="SpotLight3D" parent="Head/Camera3D"]
 position = Vector3(0.15, -0.1, 0.0)
-light_color = Color(0.95, 0.88, 0.72)
+light_color = Color(0.95, 0.88, 0.72, 1)
 light_energy = 2.8
 spot_range = 18.0
 spot_angle = 28.0
