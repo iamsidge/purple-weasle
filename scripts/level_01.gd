@@ -60,7 +60,7 @@ func _build_level() -> void:
 			match ch:
 				"#": _place_wall(pos)
 				".": _place_floor(pos)
-				"P": player.global_position = pos
+				"P": if player: player.global_position = pos
 				"G": _place_guard(pos, row)
 				"S": _place_shadow(pos)
 				"E": _place_exit(pos)
@@ -98,7 +98,7 @@ func _place_floor(pos: Vector2) -> void:
 	add_child(visual)
 
 func _place_guard(pos: Vector2, row: int) -> void:
-	# Patrol points as siblings so guard can reference them by path
+	# Create patrol waypoints as direct Node2D references — no NodePath needed
 	var pa := Node2D.new()
 	var pb := Node2D.new()
 	pa.name     = "PatrolA"
@@ -109,12 +109,14 @@ func _place_guard(pos: Vector2, row: int) -> void:
 	add_child(pb)
 
 	var guard : CharacterBody2D = GuardScene.instantiate()
-	guard.position      = pos
-	var points : Array[NodePath] = [get_path_to(pa), get_path_to(pb)]
-	guard.patrol_points = points
+	guard.position        = pos
 	guard.collision_layer = 4
 	guard.collision_mask  = 1
 	add_child(guard)
+
+	# Assign after add_child so the guard is in the scene tree
+	var points : Array[Node2D] = [pa, pb]
+	guard.patrol_points = points
 
 func _place_shadow(pos: Vector2) -> void:
 	var zone := ShadowZoneScene.instantiate()

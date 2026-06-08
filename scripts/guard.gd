@@ -11,7 +11,7 @@ const SUSPICION_MAX   := 100.0
 const ALERT_THRESHOLD := 70.0
 
 # ─── Exports ─────────────────────────────────────────────────────────────────
-@export var patrol_points : Array[NodePath] = []
+var patrol_points : Array[Node2D] = []
 @export var wait_time     : float           = 1.5
 @export var facing_angle  : float           = 0.0
 
@@ -99,13 +99,15 @@ func _patrol(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var target    : Node2D = get_node(patrol_points[current_patrol])
-	var dir       := (target.global_position - global_position).normalized()
+	var target : Node2D = patrol_points[current_patrol]
+	if not is_instance_valid(target):
+		return
+	var dir := (target.global_position - global_position).normalized()
 	velocity = dir * SPEED_PATROL
 	_face(dir)
 	move_and_slide()
 
-	if global_position.distance_to(target.global_position) < 8.0:
+	if is_instance_valid(target) and global_position.distance_to(target.global_position) < 8.0:
 		is_waiting = true
 		wait_timer = wait_time
 
