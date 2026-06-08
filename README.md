@@ -1,31 +1,32 @@
 # 🟣 Purple Weasle
 
-> *A top-down stealth puzzle game. You are the Purple Weasle — sneak, crouch and outwit guards to reach the exit undetected.*
+> *A third-person survival-horror game. You are the Purple Weasle, lost in a corrupted wood. Gather the scattered relics to unlock the way out — while its warped inhabitants hunt you through the dark.*
 
 ---
 
 ## 🎮 Gameplay
 
-Navigate each level without being spotted. Guards have a **cone of vision** — stay in the shadows, crouch to reduce your noise, and time your movements to slip past their patrol routes.
+Explore a dark, fog-bound arena in third person. Glowing **relics** are hidden throughout — collect all of them to open the exit. But the wood is not empty: **warped woodland creatures** patrol the halls, and if one spots you it will give chase.
+
+- 🦌 **The Deer** — a tall, skull-faced thing that patrols set routes
+- 🐇 **The Rabbit** — squat, fast and vicious, with too many teeth
+
+When a creature spots you it freezes, lets out a growl, then hunts. Your **heartbeat** pounds while you're being chased. Sprint to escape — but watch your **stamina**.
 
 ### Controls
 
 | Key | Action |
 |-----|--------|
-| `W A S D` | Move |
-| `Left Shift` | Crouch (quieter, harder to spot) |
-| `Left Ctrl` | Dash (fast but noisy) |
-| `E` | Interact |
+| `W A S D` | Move (relative to camera) |
+| `Mouse` | Look / orbit camera |
+| `Left Ctrl` | Sprint (drains stamina) |
+| `Esc` | Release / capture mouse |
 
-### Alert System
+### Objective
 
-Guards have three states:
-
-- 🟢 **Unaware** — patrolling normally
-- 🟡 **Suspicious** — heard or half-saw something, investigating
-- 🔴 **Alert** — spotted the weasle, giving chase
-
-Crouching in a **shadow zone** makes you almost invisible. Standing in the open while a guard faces you will fill their suspicion meter fast.
+1. Find and collect **all relics** (counter shown top-right)
+2. The exit pillar glows **red** while sealed, **green** once all relics are gathered
+3. Reach the open exit to escape
 
 ---
 
@@ -33,60 +34,70 @@ Crouching in a **shadow zone** makes you almost invisible. Standing in the open 
 
 ```
 purple-weasle/
-├── project.godot               # Godot 4 project config & input map
+├── project.godot               # Godot 4.6, Forward+ renderer, autoloads
 ├── scenes/
-│   ├── main_menu.tscn
-│   ├── game_over.tscn
-│   └── level_01.tscn           # The Museum Lobby
+│   ├── level_01_3d.tscn         # The Corrupted Wood + WorldEnvironment + HUD
+│   ├── player_3d.tscn           # Third-person weasle + spring-arm camera
+│   ├── creature.tscn            # Billboard creature (deer / rabbit)
+│   ├── relic.tscn               # Floating collectible
+│   ├── main_menu.tscn           # (2D UI)
+│   └── game_over.tscn           # (2D UI)
 ├── scripts/
-│   ├── player.gd               # Movement, crouch, dash, shadow detection
-│   ├── guard.gd                # Patrol, alert states, chase behaviour
-│   ├── detection.gd            # Line-of-sight cone with raycast occlusion
-│   ├── shadow_zone.gd          # Dark area that hides the player
-│   ├── game_manager.gd         # Autoload — level flow & scoring
-│   ├── main_menu.gd
-│   └── game_over.gd
+│   ├── player_3d.gd             # Movement, camera, stamina, footsteps
+│   ├── creature.gd              # Patrol → alert → chase → attack AI
+│   ├── relic.gd                 # Bob/spin pickup, unlocks exit
+│   ├── level_01_3d.gd           # Runtime map builder + exit gating + HUD
+│   ├── audio_manager.gd         # Autoload: ambient, heartbeat, growls, SFX
+│   ├── game_manager.gd          # Autoload: level flow, relic tracking
+│   ├── torch_flicker.gd         # Flickering torch light
+│   └── … (legacy 2D scripts kept for reference)
 └── assets/
-    ├── sprites/
-    ├── tilemaps/
-    └── audio/
+    ├── sprites/                 # Creature billboards + wall/floor textures
+    └── audio/                   # Procedurally generated WAVs
 ```
+
+---
+
+## 🔊 Audio
+
+All sound is **procedurally generated** (see the generation scripts in commit history) — no external assets:
+
+| Sound | When |
+|-------|------|
+| Ambient drone | Always (looping dread) |
+| Heartbeat | While any creature is hunting you |
+| Footsteps | While moving (faster when sprinting) |
+| Growl | When a creature first spots you (positional) |
+| Relic chime | On pickup |
+| Death sting | When caught |
 
 ---
 
 ## 🛠️ Getting Started
 
-1. Download [Godot 4](https://godotengine.org/download/)
+1. Download [Godot 4.6](https://godotengine.org/download/)
 2. Clone this repo:
    ```bash
    git clone https://github.com/iamsidge/purple-weasle.git
    ```
-3. Open `project.godot` in the Godot editor
+3. Open `project.godot` in the Godot editor (let it import assets on first open)
 4. Hit **Play** (F5)
-
----
-
-## 🗺️ Planned Levels
-
-| Level | Setting | New mechanic |
-|-------|---------|--------------|
-| 1 | Museum Lobby | Basics — shadows & patrol |
-| 2 | Research Lab | Cameras & laser tripwires |
-| 3 | Rival Gang HQ | Multiple guards, noise distractions |
 
 ---
 
 ## 📋 Roadmap
 
-- [x] Project scaffold & base scripts
-- [ ] Placeholder sprites for player & guard
-- [ ] Tilemap for Level 1
-- [ ] Working guard patrol & line-of-sight
-- [ ] Shadow zone visual polish
-- [ ] Sound effects & ambient audio
-- [ ] Level 2 & 3
-- [ ] Main menu polish & splash screen
+- [x] 3D first/third-person conversion
+- [x] Warped creature billboards + AI
+- [x] Atmosphere — fog, glow, flickering torches
+- [x] Procedural audio (ambient, heartbeat, growls, SFX)
+- [x] Stamina system
+- [x] Relic objective + gated exit
+- [ ] Animated creature sprites (multi-frame)
+- [ ] Levels 2 & 3
+- [ ] Horror-themed main menu
+- [ ] Save / checkpoint system
 
 ---
 
-*Made with [Godot 4](https://godotengine.org/) — GDScript*
+*Made with [Godot 4.6](https://godotengine.org/) — GDScript*

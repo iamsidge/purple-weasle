@@ -27,6 +27,7 @@ var patrol_wait    := 0.0
 var alert_timer    := 0.0
 var player_ref     : Node3D = null
 var last_known_pos := Vector3.ZERO
+var _was_hunting   := false
 
 # ─── Refs (nullable) ──────────────────────────────────────────────────────────
 @onready var sprite     : Sprite3D   = $Sprite3D
@@ -44,6 +45,7 @@ func _physics_process(delta: float) -> void:
 		return
 	_sense(delta)
 	_behave(delta)
+	_sync_hunt()
 	_update_visuals()
 	if velocity.length() > 0.01:
 		move_and_slide()
@@ -95,6 +97,8 @@ func _sense(_delta: float) -> void:
 		state       = State.ALERT
 		alert_timer = ALERT_PAUSE
 		GameManager.on_alert_triggered()
+		if AudioManager:
+			AudioManager.play_growl_at(global_position)
 
 # ─── Behaviour ────────────────────────────────────────────────────────────────
 func _behave(delta: float) -> void:
@@ -156,6 +160,22 @@ func _move_to(target: Vector3, speed: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 	velocity.y = velocity.y if not is_on_floor() else 0.0
+
+# ─── Hunt tracking (drives the heartbeat audio) ──────────────────────────────
+func _sync_hunt() -> void:
+	var hunting := state == State.CHASE or state == State.ATTACK
+	if hunting == _was_hunting:
+		return
+	_was_hunting = hunting
+	if AudioManager:
+		if hunting:
+			AudioManager.add_hunter(self)
+		else:
+			AudioManager.remove_hunter(self)
+
+func _exit_tree() -> void:
+	if _was_hunting and AudioManager:
+		AudioManager.remove_hunter(self)
 
 # ─── Visuals ──────────────────────────────────────────────────────────────────
 func _update_visuals() -> void:

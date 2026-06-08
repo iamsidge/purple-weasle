@@ -5,11 +5,16 @@ extends Node
 
 signal level_complete
 signal game_over
+signal relics_changed(collected: int, total: int)
 
 var current_level    : int = 1
 var total_levels     : int = 3
 var stealth_rating   : int = 3   # 1–3 stars
 var alerts_triggered : int = 0
+
+# ─── Relic objective ──────────────────────────────────────────────────────────
+var relics_total     : int = 0
+var relics_collected : int = 0
 
 const SCENE_MENU     := "res://scenes/main_menu.tscn"
 const SCENE_GAMEOVER := "res://scenes/game_over.tscn"
@@ -36,6 +41,8 @@ func load_level(level_index: int) -> void:
 
 func on_level_complete() -> void:
 	emit_signal("level_complete")
+	if AudioManager:
+		AudioManager.reset()
 	await get_tree().create_timer(1.5).timeout
 	if current_level < total_levels:
 		current_level += 1
@@ -45,8 +52,23 @@ func on_level_complete() -> void:
 
 func on_player_caught() -> void:
 	emit_signal("game_over")
-	await get_tree().create_timer(0.8).timeout
+	if AudioManager:
+		AudioManager.reset()
+	await get_tree().create_timer(1.2).timeout
 	get_tree().change_scene_to_file(SCENE_GAMEOVER)
+
+# ─── Relics ───────────────────────────────────────────────────────────────────
+func set_relic_total(n: int) -> void:
+	relics_total     = n
+	relics_collected = 0
+	emit_signal("relics_changed", relics_collected, relics_total)
+
+func collect_relic() -> void:
+	relics_collected += 1
+	emit_signal("relics_changed", relics_collected, relics_total)
+
+func all_relics_collected() -> bool:
+	return relics_total > 0 and relics_collected >= relics_total
 
 func on_alert_triggered() -> void:
 	alerts_triggered += 1
