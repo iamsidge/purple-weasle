@@ -179,22 +179,14 @@ func _on_player_died() -> void:
 func _spawn_creature(pos: Vector3, type: String) -> void:
 	var c := CreatureScene.instantiate()
 	c.position      = Vector3(pos.x, 0.0, pos.z)
-	c.creature_type = type
+	c.creature_type = type   # creature.gd handles its own per-type tuning
 
 	if type == "rabbit":
+		# Rabbits lurk in place and ambush when they spot you — no patrol route
 		add_child(c)
-		var sp := c.get_node_or_null("Sprite3D") as Sprite3D
-		if sp:
-			sp.texture     = load("res://assets/sprites/creature_rabbit.png") as Texture2D
-			sp.position.y  = 0.6
-			sp.pixel_size  = 0.032
-		var col_node := c.get_node_or_null("CollisionShape3D") as CollisionShape3D
-		if col_node and col_node.shape is CapsuleShape3D:
-			(col_node.shape as CapsuleShape3D).height = 1.2
-			col_node.position.y = 0.6
 		return
 
-	# Deer patrol pair
+	# Deer patrol back and forth around their spawn
 	var pa := Node3D.new(); pa.position = Vector3(pos.x - CELL * 3.0, 0, pos.z)
 	var pb := Node3D.new(); pb.position = Vector3(pos.x + CELL * 3.0, 0, pos.z)
 	pa.name = "CreaturePatrolA"; pb.name = "CreaturePatrolB"

@@ -30,15 +30,58 @@ var last_known_pos := Vector3.ZERO
 var _was_hunting   := false
 
 # ─── Refs (nullable) ──────────────────────────────────────────────────────────
-@onready var sprite     : Sprite3D   = $Sprite3D
-@onready var ray        : RayCast3D  = $RayCast3D
-@onready var alert_label: Label3D    = $AlertLabel
+@onready var sprite     : AnimatedSprite3D = $AnimatedSprite3D
+@onready var ray        : RayCast3D        = $RayCast3D
+@onready var alert_label: Label3D          = $AlertLabel
 
 # ─── Lifecycle ────────────────────────────────────────────────────────────────
 func _ready() -> void:
 	add_to_group("creatures")
 	if alert_label:
 		alert_label.visible = false
+	_build_frames()
+	_apply_type_tuning()
+	if sprite:
+		sprite.play("idle")
+
+# ─── Animation frames (built in code per creature type) ───────────────────────
+func _build_frames() -> void:
+	if sprite == null:
+		return
+	var sf := SpriteFrames.new()
+	var prefix := "res://assets/sprites/creature_%s_" % creature_type
+
+	_add_anim(sf, "walk",   ["walk0", "walk1", "walk2", "walk3"], 6.0, prefix)
+	_add_anim(sf, "idle",   ["walk0", "walk2"],                   2.0, prefix)
+	_add_anim(sf, "attack", ["attack0", "attack1"],               8.0, prefix)
+
+	sprite.sprite_frames = sf
+
+func _add_anim(sf: SpriteFrames, name: String, frames: Array, fps: float, prefix: String) -> void:
+	sf.add_animation(name)
+	sf.set_animation_speed(name, fps)
+	sf.set_animation_loop(name, true)
+	for f in frames:
+		var tex := load(prefix + f + ".png") as Texture2D
+		if tex:
+			sf.add_frame(name, tex)
+
+func _apply_type_tuning() -> void:
+	# Rabbits are shorter and a touch smaller; give them their own collision
+	# shape so the shared scene resource isn't mutated for every creature.
+	if creature_type == "rabbit":
+		if sprite:
+			sprite.pixel_size = 0.032
+			sprite.position.y = 0.6
+		var col := get_node_or_null("CollisionShape3D") as CollisionShape3D
+		if col and col.shape is CapsuleShape3D:
+			col.shape = col.shape.duplicate()
+			(col.shape as CapsuleShape3D).height = 1.2
+			col.position.y = 0.6
+	else:
+		if sprite:
+			sprite.pixel_size = 0.04
+			sprite.position.y = 1.0
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
@@ -47,6 +90,7 @@ func _physics_process(delta: float) -> void:
 	_behave(delta)
 	_sync_hunt()
 	_update_visuals()
+	_update_animation()
 	if velocity.length() > 0.01:
 		move_and_slide()
 
@@ -201,3 +245,24 @@ func _update_visuals() -> void:
 				alert_label.visible = true
 			_:
 				alert_label.visible = false
+
+# ─── Animation selection ──────────────────────────────────────────────────────
+func _update_animation() -> void:
+	if sprite == null or sprite.sprite_frames == null:
+		return
+	var anim  := "idle"
+	var speed := 1.0
+	match state:
+		State.ATTACK:
+			anim = "attack"
+		State.CHASE:
+			anim = "walk"; speed = 1.8          # frantic when hunting
+		State.PATROL:
+			anim = "walk" if velocity.length() > 0.1 else "idle"
+		State.ALERT, State.IDLE:
+			anim = "idle"
+		State.DEAD:
+			sprite.stop(); return
+	if sprite.animation != anim:
+		sprite.play(anim)
+	sprite.speed_scale = speed
