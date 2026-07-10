@@ -1,27 +1,12 @@
-# Godot 4 .gitignore
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
 
-# Godot-specific ignores
-.godot/
-*.translation
-
-# Import cache
-.import/
-
-# Export directories
-export/
-*.pck
-*.zip
-
-# Binary exports
-*.exe
-*.x86
-*.x86_64
-*.arm
-*.arm64
-*.app
-*.apk
-*.aab
-
-# OS-specific
+# OS
 .DS_Store
 Thumbs.db
